@@ -1,0 +1,4 @@
+﻿  snakes.c
+e:\학교\2019-01 학기\02 오픈소스sw개론\과제\과제5\snake_1\dependencies\ascii-snake-master\snakes.c(60): warning C4101: 'j' :참조되지 않은 지역 변수입니다.
+e:\학교\2019-01 학기\02 오픈소스sw개론\과제\과제5\snake_1\dependencies\ascii-snake-master\snakes.c(24): warning C4716: 'redraw': 값을 반환해야 합니다.
+  Snake_1.vcxproj -> E:\학교\2019-01 학기\02 오픈소스SW개론\과제\과제5\Snake_1\Debug\Snake_1.exe
