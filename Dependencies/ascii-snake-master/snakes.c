@@ -91,17 +91,16 @@ void foodgained(int arr[BOUNDARY][2], int *leng, int *fx, int *fy, int *score)
 	//printf("x: %d, fx: %d, y: %d, fy: %d\n", arr[*leng - 1][0], *fx, arr[*leng - 1][1], *fy);
 	// 스네이크 머리의 위치(x, y)가 food의 위치(fx, fy)와 같다면
 	// 음식을 먹은 것으로 인식
-	if (arr[*leng - 1][0] == *fx && arr[*leng - 1][1] == *fy)	
+	if (arr[*leng - 1][0] == *fx && arr[*leng - 1][1] == *fy)
 	{
 		Sleep(100);
 
-		// 음식(food) 출력 (위치 지정 후 출력)
-		*fx = rand() % 5 + 6;
-		*fy = rand() % 5 + 6;
+		// 음식(food) 출력 (위치 지정 후 출력) 
 
-
-		gotoxy(*fx, *fy);	// 커서를 x, y 위치에 위치시키고
-		printf("%s", "X");										// 음식(X) 출력
+		*fx = (rand() % (GBOARD_WIDTH) * 2) + GBOARD_ORIGIN_X + 2;
+		*fy = (rand() % (GBOARD_HEIGHT - 1)) + GBOARD_ORIGIN_Y + 1;
+		gotoxy(*fx, *fy);
+		printf("%s", "X");
 		(*score)++;
 
 		// 스코어 출력 (위치 지정(50, 0) 후 출력)
@@ -171,16 +170,17 @@ BOOL collision(int arr[BOUNDARY][2], int leng, int *move)
 /// <param name="score"></param>
 void init(int arr[BOUNDARY][2], int *fx, int *fy, int *leng, int *score)
 {
-	*fx = rand() % 30 + 1;
-	*fy = rand() % 30 + 1; 
+	*fx = (rand() % (GBOARD_WIDTH) * 2) + GBOARD_ORIGIN_X + 2;
+	*fy = (rand() % (GBOARD_HEIGHT - 1)) + GBOARD_ORIGIN_Y + 1;
 	gotoxy(*fx, *fy);
-	printf("%s ", "X");
+	printf("%s", "X");
+
 	int r = 0;
 	*leng = 3;
 	for (r = 0; r < *leng; r++)
 	{
 		arr[r][0] = GBOARD_ORIGIN_X + 4;
-		arr[r][1] = GBOARD_ORIGIN_Y+4;
+		arr[r][1] = GBOARD_ORIGIN_Y + 4;
 	}
 	*score = 0;
 }
