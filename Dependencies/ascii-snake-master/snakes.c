@@ -257,7 +257,7 @@ void DrawGameBoard() //뒤에 배경그리기
 int main()
 {
 	CursorView(0);
-	DrawGameBoard(); 
+	DrawGameBoard();
 
 
 	// 콘솔창 스크롤바 제거
@@ -276,18 +276,7 @@ int main()
 
 	init(arr, &fx, &fy, &leng, &score);
 	while (1) {
-		if (_kbhit()) {
-			/*controls for the snake <ASDW> */
-			curKeyVal = _getch();
-			if (curKeyVal == 'w' && move != DOWN)	// 상
-				move = UP;
-			else if (curKeyVal == 's' && move != UP)	// 하
-				move = DOWN;
-			else if (curKeyVal == 'd' && move != LEFT)	// 우
-				move = RIGHT;
-			else if (curKeyVal == 'a' && move != RIGHT)		// 좌
-				move = LEFT;
-		}
+
 
 		int delay = move == LEFT || move == RIGHT ? 10 : 15;
 		Sleep(delay);	// 속도 조절
@@ -295,12 +284,24 @@ int main()
 
 		if (t == 10)
 		{
+			if (_kbhit()) {
+				/*controls for the snake <ASDW> */
+				curKeyVal = _getch();
+				if (curKeyVal == 'w' && move != DOWN)	// 상
+					move = UP;
+				else if (curKeyVal == 's' && move != UP)	// 하w
+					move = DOWN;
+				else if (curKeyVal == 'd' && move != LEFT)	// 우
+					move = RIGHT;
+				else if (curKeyVal == 'a' && move != RIGHT)		// 좌
+					move = LEFT;
+			}
 			maintLastDirection(arr, move, &leng);
 			redraw(arr, leng);
 			foodgained(arr, &leng, &fx, &fy, &score);
 
 			if (collision(arr, leng, &move)) {
-				 
+
 				_cprintf("Game Over-- X ---");
 				_getch();
 				_cprintf("Restart the game.....");
