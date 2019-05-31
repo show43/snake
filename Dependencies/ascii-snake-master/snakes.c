@@ -289,7 +289,7 @@ int main()
 				curKeyVal = _getch();
 				if (curKeyVal == 'w' && move != DOWN)	// 상
 					move = UP;
-				else if (curKeyVal == 's' && move != UP)	// 하w
+				else if (curKeyVal == 's' && move != UP)	// 하
 					move = DOWN;
 				else if (curKeyVal == 'd' && move != LEFT)	// 우
 					move = RIGHT;
@@ -302,9 +302,10 @@ int main()
 
 			if (collision(arr, leng, &move)) {
 
-				_cprintf("Game Over-- X ---");
-				_getch();
-				_cprintf("Restart the game.....");
+				gotoxy(GBOARD_WIDTH-GBOARD_ORIGIN_X-1, GBOARD_ORIGIN_Y + GBOARD_HEIGHT / 2);
+				printf("  GAME OVER ", score); 
+				gotoxy(GBOARD_WIDTH -GBOARD_ORIGIN_X-3, GBOARD_ORIGIN_Y + GBOARD_HEIGHT / 2 +1);
+				printf(" Your Score : %d ", score);
 				_getch();
 
 				break;
