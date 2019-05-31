@@ -4,6 +4,12 @@
 #include<stdlib.h>
 //#include "graphics.h"
 
+
+#define GBOARD_WIDTH 50
+#define GBOARD_HEIGHT 25
+#define GBOARD_ORIGIN_X 2
+#define GBOARD_ORIGIN_Y 2
+
 #define BOUNDARY 100
 #define UP -2
 #define LEFT -1
@@ -54,6 +60,8 @@ int redraw(int arr[BOUNDARY][2], int leng)
 	}
 }
 
+
+
 /// <summary>
 /// 위치 변경 (x, y)
 /// </summary>
@@ -91,14 +99,6 @@ void foodgained(int arr[BOUNDARY][2], int *leng, int *fx, int *fy, int *score)
 		*fx = rand() % 5 + 6;
 		*fy = rand() % 5 + 6;
 
-		// 음식(food) 생성 시 스네이크의 현재 위치와 겹칠 시 다시 생성
-		for (int i = 0; i < *leng; i++) {
-			if (arr[i][0] == *fx || arr[i][1] == *fy) {
-				*fx = rand() % 5 + 6;
-				*fy = rand() % 5 + 6;
-				i = 0;
-			}
-		}
 
 		gotoxy(*fx, *fy);	// 커서를 x, y 위치에 위치시키고
 		printf("%s", "X");										// 음식(X) 출력
@@ -139,8 +139,16 @@ void maintLastDirection(int arr[BOUNDARY][2], int move, int *leng)
 /// <param name="arr"></param>
 /// <param name="leng"></param>
 /// <returns></returns>
-BOOL collision(int arr[BOUNDARY][2], int leng)
+BOOL collision(int arr[BOUNDARY][2], int leng, int *move)
 {
+	BOOL collcheck_x = (arr[0][0] > GBOARD_WIDTH * 2 + GBOARD_ORIGIN_X - 1 && *move == RIGHT) || (arr[0][0] <= GBOARD_ORIGIN_X + 3 && *move == LEFT);
+	BOOL collcheck_y = (arr[0][1] > GBOARD_HEIGHT + GBOARD_ORIGIN_Y-3&& *move == DOWN) || (arr[0][1] <= GBOARD_ORIGIN_Y + 2 && *move == UP);
+
+	if (collcheck_x || collcheck_y)
+	{ 
+		return TRUE;
+	}
+
 	int i, j;
 	for (i = 0; i < leng - 2; i++)
 	{
@@ -163,14 +171,16 @@ BOOL collision(int arr[BOUNDARY][2], int leng)
 /// <param name="score"></param>
 void init(int arr[BOUNDARY][2], int *fx, int *fy, int *leng, int *score)
 {
-	gotoxy(*fx = rand() % 30 + 1, *fy = rand() % 30 + 1);
+	*fx = rand() % 30 + 1;
+	*fy = rand() % 30 + 1; 
+	gotoxy(*fx, *fy);
 	printf("%s ", "X");
 	int r = 0;
 	*leng = 3;
 	for (r = 0; r < *leng; r++)
 	{
-		arr[r][0] = r + 1;
-		arr[r][1] = 0;
+		arr[r][0] = GBOARD_ORIGIN_X + 4;
+		arr[r][1] = GBOARD_ORIGIN_Y+4;
 	}
 	*score = 0;
 }
@@ -191,6 +201,52 @@ void remove_scrollbar()
 	SetConsoleScreenBufferSize(handle, new_size);
 }
 
+ 
+
+void CursorView(char show) //커서 숨기기
+{
+	HANDLE hConsole;
+	CONSOLE_CURSOR_INFO ConsoleCursor;
+
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	ConsoleCursor.bVisible = show;
+	ConsoleCursor.dwSize = 1;
+
+	SetConsoleCursorInfo(hConsole, &ConsoleCursor);
+}
+
+void DrawGameBoard() //뒤에 배경그리기
+{
+	int x, y;
+	for (y = 0; y <= GBOARD_HEIGHT; y++)
+	{
+		gotoxy(GBOARD_ORIGIN_X, GBOARD_ORIGIN_Y + y);
+		if (y == GBOARD_HEIGHT)
+			printf("└");
+		else
+			printf("│");
+		gotoxy(GBOARD_WIDTH * 2 + GBOARD_ORIGIN_X + 2, GBOARD_ORIGIN_Y + y);
+		if (y == GBOARD_HEIGHT)
+			printf("┘");
+		else
+			printf("│");
+	} 
+
+	gotoxy(GBOARD_ORIGIN_X, GBOARD_ORIGIN_Y);
+	printf("┌");
+	gotoxy(GBOARD_ORIGIN_X + GBOARD_WIDTH * 2 + 2, GBOARD_ORIGIN_Y);
+	printf("┐");
+	for (x = 0; x < GBOARD_WIDTH; x++)
+	{
+
+		gotoxy(GBOARD_ORIGIN_X + 2 + (2 * x), GBOARD_ORIGIN_Y + GBOARD_HEIGHT);
+		printf("─");
+
+		gotoxy(GBOARD_ORIGIN_X + 2 + (2 * x), GBOARD_ORIGIN_Y);
+		printf("─");
+	}
+} 
 
 
 
@@ -200,6 +256,10 @@ void remove_scrollbar()
 /// <returns></returns>
 int main()
 {
+	CursorView(0);
+	DrawGameBoard(); 
+
+
 	// 콘솔창 스크롤바 제거
 	remove_scrollbar();
 
@@ -228,19 +288,24 @@ int main()
 			else if (curKeyVal == 'a' && move != RIGHT)		// 좌
 				move = LEFT;
 		}
-		Sleep(10);	// 속도 조절
+
+		int delay = move == LEFT || move == RIGHT ? 10 : 15;
+		Sleep(delay);	// 속도 조절
 		t++;
+
 		if (t == 10)
 		{
 			maintLastDirection(arr, move, &leng);
 			redraw(arr, leng);
-
 			foodgained(arr, &leng, &fx, &fy, &score);
-			if (collision(arr, leng)) {
+
+			if (collision(arr, leng, &move)) {
+				 
 				_cprintf("Game Over-- X ---");
 				_getch();
 				_cprintf("Restart the game.....");
 				_getch();
+
 				break;
 			}
 
