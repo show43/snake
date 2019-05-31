@@ -219,6 +219,17 @@ void CursorView(char show) //커서 숨기기
 void DrawGameBoard() //뒤에 배경그리기
 {
 	int x, y;
+	 
+	for (x = 0; x < GBOARD_WIDTH +4; x++)
+	{ 
+		for (int y = 0; y < GBOARD_HEIGHT+4; y++)
+		{
+
+			gotoxy(x*2,  y);
+			printf("  ");
+		}
+	}
+	 
 	for (y = 0; y <= GBOARD_HEIGHT; y++)
 	{
 		gotoxy(GBOARD_ORIGIN_X, GBOARD_ORIGIN_Y + y);
@@ -256,64 +267,67 @@ void DrawGameBoard() //뒤에 배경그리기
 /// <returns></returns>
 int main()
 {
-	CursorView(0);
-	DrawGameBoard();
+	while (1)
+	{
+		CursorView(0);
+		DrawGameBoard(); 
 
+		// 콘솔창 스크롤바 제거
+		remove_scrollbar();
 
-	// 콘솔창 스크롤바 제거
-	remove_scrollbar();
+		// textcolor(RED);
+		int arr[BOUNDARY][2];
+		int leng = 0;
+		int move = 1;
+		int curKeyVal;
+		int t = 0;
+		int fx;
+		int fy;
+		int over = 0;
+		int score = 0;	// 점수
+		int check_gameover = 1;
+		init(arr, &fx, &fy, &leng, &score);
+		while (check_gameover) { 
+			int delay = move == LEFT || move == RIGHT ? 10 : 15;
+			Sleep(delay);	// 속도 조절
+			t++;
 
-	// textcolor(RED);
-	int arr[BOUNDARY][2];
-	int leng = 0;
-	int move = 1;
-	int curKeyVal;
-	int t = 0;
-	int fx;
-	int fy;
-	int over = 0;
-	int score = 0;	// 점수
+			if (t == 10)
+			{
+				if (_kbhit()) {
+					/*controls for the snake <ASDW> */
+					curKeyVal = _getch();
+					if (curKeyVal == 'w' && move != DOWN)	// 상
+						move = UP;
+					else if (curKeyVal == 's' && move != UP)	// 하
+						move = DOWN;
+					else if (curKeyVal == 'd' && move != LEFT)	// 우
+						move = RIGHT;
+					else if (curKeyVal == 'a' && move != RIGHT)		// 좌
+						move = LEFT;
+				}
+				maintLastDirection(arr, move, &leng);
+				redraw(arr, leng);
+				foodgained(arr, &leng, &fx, &fy, &score);
 
-	init(arr, &fx, &fy, &leng, &score);
-	while (1) {
+				if (collision(arr, leng, &move)) {
 
+					gotoxy(GBOARD_WIDTH - GBOARD_ORIGIN_X - 1, GBOARD_ORIGIN_Y + GBOARD_HEIGHT / 2);
+					printf("  GAME OVER ", score);
+					gotoxy(GBOARD_WIDTH - GBOARD_ORIGIN_X - 3, GBOARD_ORIGIN_Y + GBOARD_HEIGHT / 2 + 1);
+					printf(" Your Score : %d ", score);
+					gotoxy(GBOARD_WIDTH - GBOARD_ORIGIN_X - 14, GBOARD_ORIGIN_Y + GBOARD_HEIGHT / 2 + 5);
+					printf("아무키나 누르면 게임이 다시 시작됩니다.");
+					_getch(); 
+					check_gameover = 0;
+				}
 
-		int delay = move == LEFT || move == RIGHT ? 10 : 15;
-		Sleep(delay);	// 속도 조절
-		t++;
-
-		if (t == 10)
+				t = 0;
+			}
+		}
+		while (_kbhit())//게임 오버 후 아무키 입력 시 게임 다시 시작
 		{
-			if (_kbhit()) {
-				/*controls for the snake <ASDW> */
-				curKeyVal = _getch();
-				if (curKeyVal == 'w' && move != DOWN)	// 상
-					move = UP;
-				else if (curKeyVal == 's' && move != UP)	// 하
-					move = DOWN;
-				else if (curKeyVal == 'd' && move != LEFT)	// 우
-					move = RIGHT;
-				else if (curKeyVal == 'a' && move != RIGHT)		// 좌
-					move = LEFT;
-			}
-			maintLastDirection(arr, move, &leng);
-			redraw(arr, leng);
-			foodgained(arr, &leng, &fx, &fy, &score);
-
-			if (collision(arr, leng, &move)) {
-
-				gotoxy(GBOARD_WIDTH-GBOARD_ORIGIN_X-1, GBOARD_ORIGIN_Y + GBOARD_HEIGHT / 2);
-				printf("  GAME OVER ", score); 
-				gotoxy(GBOARD_WIDTH -GBOARD_ORIGIN_X-3, GBOARD_ORIGIN_Y + GBOARD_HEIGHT / 2 +1);
-				printf(" Your Score : %d ", score);
-				_getch();
-
-				break;
-			}
-
-			t = 0;
 		}
 	}
-
 	return 0;
 }
