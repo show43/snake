@@ -1,5 +1,4 @@
 ﻿  snakes.c
-c:\program files\git\home\snake\snake_1\dependencies\ascii-snake-master\snakes.c(60): warning C4101: 'j' :참조되지 않은 지역 변수입니다.
-c:\program files\git\home\snake\snake_1\dependencies\ascii-snake-master\snakes.c(24): warning C4716: 'redraw': 값을 반환해야 합니다.
-  LINK : C:\Program Files\Git\home\snake\Snake_1\Debug\Snake_1.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
-  Snake_1.vcxproj -> C:\Program Files\Git\home\snake\Snake_1\Debug\Snake_1.exe
+c:\program files\git\home\snake\chae\snake\dependencies\ascii-snake-master\snakes.c(144): warning C4101: 'j' :참조되지 않은 지역 변수입니다.
+c:\program files\git\home\snake\chae\snake\dependencies\ascii-snake-master\snakes.c(55): warning C4716: 'redraw': 값을 반환해야 합니다.
+  Snake_1.vcxproj -> C:\Program Files\Git\home\snake\chae\snake\Debug\Snake_1.exe
