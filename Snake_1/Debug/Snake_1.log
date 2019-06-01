@@ -1,6 +1,6 @@
 ﻿  snakes.c
-d:\git\snake\dependencies\ascii-snake-master\snakes.c(174): warning C4101: 'j' :참조되지 않은 지역 변수입니다.
-d:\git\snake\dependencies\ascii-snake-master\snakes.c(326): warning C4474: 'printf' : 서식 문자열에 전달된 인수가 너무 많습니다.
-  d:\git\snake\dependencies\ascii-snake-master\snakes.c(326): note: 자리 표시자 및 해당 매개 변수에는 variadic 인수가 0개 필요하지만 1개가 제공되었습니다.
+d:\git\snake\dependencies\ascii-snake-master\snakes.c(173): warning C4101: 'j' :참조되지 않은 지역 변수입니다.
+d:\git\snake\dependencies\ascii-snake-master\snakes.c(325): warning C4474: 'printf' : 서식 문자열에 전달된 인수가 너무 많습니다.
+  d:\git\snake\dependencies\ascii-snake-master\snakes.c(325): note: 자리 표시자 및 해당 매개 변수에는 variadic 인수가 0개 필요하지만 1개가 제공되었습니다.
 d:\git\snake\dependencies\ascii-snake-master\snakes.c(82): warning C4716: 'redraw': 값을 반환해야 합니다.
   Snake_1.vcxproj -> D:\Git\snake\Debug\Snake_1.exe

@@ -113,8 +113,7 @@ void foodgained(int arr[BOUNDARY][2], int *leng, int *fx, int *fy, int *score)
 	// 스네이크 머리의 위치(x, y)가 food의 위치(fx, fy)와 같다면
 	// 음식을 먹은 것으로 인식
 	if (arr[*leng - 1][0] == *fx && arr[*leng - 1][1] == *fy)
-	{
-		Sleep(100);
+	{ 
 
 		// 음식(food) 출력 (위치 지정 후 출력) 
 
@@ -192,7 +191,7 @@ BOOL collision(int arr[BOUNDARY][2], int leng, int *move)
 /// <param name="le"></param>
 /// <param name="score"></param>
 void init(int arr[BOUNDARY][2], int *fx, int *fy, int *leng, int *score)
-{
+{ 
 	*fx = (rand() % (GBOARD_WIDTH) * 2) + GBOARD_ORIGIN_X + 2;
 	*fy = (rand() % (GBOARD_HEIGHT - 1)) + GBOARD_ORIGIN_Y + 1;
 	gotoxy(*fx, *fy);
