@@ -140,8 +140,8 @@ void maintLastDirection(int arr[BOUNDARY][2], int move, int *leng)
 /// <returns></returns>
 BOOL collision(int arr[BOUNDARY][2], int leng, int *move)
 {
-	BOOL collcheck_x = (arr[0][0] > GBOARD_WIDTH * 2 + GBOARD_ORIGIN_X - 1 && *move == RIGHT) || (arr[0][0] <= GBOARD_ORIGIN_X + 3 && *move == LEFT);
-	BOOL collcheck_y = (arr[0][1] > GBOARD_HEIGHT + GBOARD_ORIGIN_Y-3&& *move == DOWN) || (arr[0][1] <= GBOARD_ORIGIN_Y + 2 && *move == UP);
+	BOOL collcheck_x = (arr[leng-1][0] >= GBOARD_WIDTH * 2 + GBOARD_ORIGIN_X +2&& *move == RIGHT) || (arr[leng - 1][0] <= GBOARD_ORIGIN_X+1 && *move == LEFT);
+	BOOL collcheck_y = (arr[leng - 1][1] >= GBOARD_HEIGHT + GBOARD_ORIGIN_Y&& *move == DOWN) || (arr[leng - 1][1] <= GBOARD_ORIGIN_Y  && *move == UP);
 
 	if (collcheck_x || collcheck_y)
 	{ 
@@ -151,7 +151,7 @@ BOOL collision(int arr[BOUNDARY][2], int leng, int *move)
 	int i, j;
 	for (i = 0; i < leng - 2; i++)
 	{
-		if (arr[i][0] == arr[leng - 1][0] && arr[leng - 1][1] == arr[i][1])
+		if (arr[i][0] == arr[leng - 1][0] && arr[i][1] == arr[leng - 1][1])
 		{
 			return TRUE;	// 충돌 했을 때 반환
 		}
