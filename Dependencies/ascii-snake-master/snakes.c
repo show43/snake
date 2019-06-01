@@ -28,6 +28,25 @@ void gotoxy(short x, short y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);	// 콘솔 커서의 위치를 조정
 }
 
+
+void textcolor(int color_number) //커서 색상 변경
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color_number);
+}
+
+void CursorView(char show) //커서 숨기기
+{
+	HANDLE hConsole;
+	CONSOLE_CURSOR_INFO ConsoleCursor;
+
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	ConsoleCursor.bVisible = show;
+	ConsoleCursor.dwSize = 1;
+
+	SetConsoleCursorInfo(hConsole, &ConsoleCursor);
+}
+
 /// <summary>
 /// 스네이크 그리는 함수
 /// 콘솔창 상에서 특수문자는 너비 2를 사용,
@@ -48,16 +67,18 @@ int redraw(int arr[BOUNDARY][2], int leng)
 	// 먹이 자체가 사리지게 되므로 스네이크 문자 구성시 알파벳/숫자로 표현할 것
 
 	gotoxy(arr[0][0], arr[0][1]);
-	printf("%s", "t");	// 꼬리
+	textcolor(10);
+	printf("%s", "ο");	// 꼬리
 
 	for (int i = 1; i < leng; i++)
 	{
 		gotoxy(arr[i][0], arr[i][1]);
 		if (!(i == (leng - 1)))
-			printf("%s", "#");	// 몸통
+			printf("%s", "＠");	// 몸통
 		else
-			printf("%s", "O");	// 머리
+			printf("%s", "○");	// 머리
 	}
+	textcolor(15);
 }
 
 
@@ -71,7 +92,7 @@ int redraw(int arr[BOUNDARY][2], int leng)
 void movechange(int *x, int *y, int move)
 {
 	if (move == LEFT || move == RIGHT)
-		*x = *x + move;
+		*x = *x + move * 2;
 	else
 		*y = *y + (move / 2);
 }
@@ -100,7 +121,9 @@ void foodgained(int arr[BOUNDARY][2], int *leng, int *fx, int *fy, int *score)
 		*fx = (rand() % (GBOARD_WIDTH) * 2) + GBOARD_ORIGIN_X + 2;
 		*fy = (rand() % (GBOARD_HEIGHT - 1)) + GBOARD_ORIGIN_Y + 1;
 		gotoxy(*fx, *fy);
-		printf("%s", "X");
+		textcolor(12);
+		printf("%s", "δ");
+		textcolor(15);
 		(*score)++;
 
 		// 스코어 출력 (위치 지정(50, 0) 후 출력)
@@ -173,8 +196,9 @@ void init(int arr[BOUNDARY][2], int *fx, int *fy, int *leng, int *score)
 	*fx = (rand() % (GBOARD_WIDTH) * 2) + GBOARD_ORIGIN_X + 2;
 	*fy = (rand() % (GBOARD_HEIGHT - 1)) + GBOARD_ORIGIN_Y + 1;
 	gotoxy(*fx, *fy);
-	printf("%s", "X");
-
+	textcolor(12);
+	printf("%s", "δ");
+	textcolor(15);
 	int r = 0;
 	*leng = 3;
 	for (r = 0; r < *leng; r++)
@@ -201,20 +225,8 @@ void remove_scrollbar()
 	SetConsoleScreenBufferSize(handle, new_size);
 }
 
- 
 
-void CursorView(char show) //커서 숨기기
-{
-	HANDLE hConsole;
-	CONSOLE_CURSOR_INFO ConsoleCursor;
 
-	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	ConsoleCursor.bVisible = show;
-	ConsoleCursor.dwSize = 1;
-
-	SetConsoleCursorInfo(hConsole, &ConsoleCursor);
-}
 
 void DrawGameBoard() //뒤에 배경그리기
 {
@@ -228,8 +240,7 @@ void DrawGameBoard() //뒤에 배경그리기
 			gotoxy(x*2,  y);
 			printf("  ");
 		}
-	}
-	 
+	} 
 	for (y = 0; y <= GBOARD_HEIGHT; y++)
 	{
 		gotoxy(GBOARD_ORIGIN_X, GBOARD_ORIGIN_Y + y);
@@ -256,7 +267,7 @@ void DrawGameBoard() //뒤에 배경그리기
 
 		gotoxy(GBOARD_ORIGIN_X + 2 + (2 * x), GBOARD_ORIGIN_Y);
 		printf("─");
-	}
+	} 
 } 
 
 
@@ -287,9 +298,8 @@ int main()
 		int score = 0;	// 점수
 		int check_gameover = 1;
 		init(arr, &fx, &fy, &leng, &score);
-		while (check_gameover) { 
-			int delay = move == LEFT || move == RIGHT ? 10 : 15;
-			Sleep(delay);	// 속도 조절
+		while (check_gameover) {  
+			Sleep(8);	// 속도 조절
 			t++;
 
 			if (t == 10)
